@@ -25,10 +25,121 @@ body {
 	justify-content: center;
 	align-items: center;
 	gap: 2rem;
+	position: relative;
+	overflow: hidden;
+}
+
+.background-text {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 4rem;
+	font-weight: bold;
+	white-space: nowrap;
+	letter-spacing: 0.15em;
+	opacity: 0.25;
+	z-index: 0;
+	font-family: "Playfair Display", serif;
+	text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+	.background-text {
+		font-size: 1.5rem;
+		letter-spacing: 0.05em;
+	}
+}
+
+.bg-char {
+	display: inline-block;
+	color: #ff4444;
+	animation: fadeInOutChar 4s ease-in-out infinite;
+}
+
+.bg-char:nth-child(1) {
+	animation-delay: 0s;
+}
+.bg-char:nth-child(2) {
+	animation-delay: 0.1s;
+}
+.bg-char:nth-child(3) {
+	animation-delay: 0.2s;
+}
+.bg-char:nth-child(4) {
+	animation-delay: 0.3s;
+}
+.bg-char:nth-child(5) {
+	animation-delay: 0.4s;
+}
+.bg-char:nth-child(6) {
+	animation-delay: 0.5s;
+}
+.bg-char:nth-child(7) {
+	animation-delay: 0.6s;
+}
+.bg-char:nth-child(8) {
+	animation-delay: 0.7s;
+}
+.bg-char:nth-child(9) {
+	animation-delay: 0.8s;
+}
+.bg-char:nth-child(10) {
+	animation-delay: 0.9s;
+}
+.bg-char:nth-child(11) {
+	animation-delay: 1s;
+}
+.bg-char:nth-child(12) {
+	animation-delay: 1.1s;
+}
+.bg-char:nth-child(13) {
+	animation-delay: 1.2s;
+}
+.bg-char:nth-child(14) {
+	animation-delay: 1.3s;
+}
+.bg-char:nth-child(15) {
+	animation-delay: 1.4s;
+}
+.bg-char:nth-child(16) {
+	animation-delay: 1.5s;
+}
+.bg-char:nth-child(17) {
+	animation-delay: 1.6s;
+}
+.bg-char:nth-child(18) {
+	animation-delay: 1.7s;
+}
+.bg-char:nth-child(19) {
+	animation-delay: 1.8s;
+}
+.bg-char:nth-child(20) {
+	animation-delay: 1.9s;
+}
+.bg-char:nth-child(21) {
+	animation-delay: 2s;
+}
+.bg-char:nth-child(22) {
+	animation-delay: 2.1s;
+}
+.bg-char:nth-child(23) {
+	animation-delay: 2.2s;
+}
+.bg-char:nth-child(24) {
+	animation-delay: 2.3s;
+}
+.bg-char:nth-child(25) {
+	animation-delay: 2.4s;
+}
+.bg-char:nth-child(26) {
+	animation-delay: 2.5s;
 }
 
 .logo-container {
 	animation: fadeInDown 1s ease-out both;
+	position: relative;
+	z-index: 1;
 }
 
 .logo-image {
@@ -36,6 +147,13 @@ body {
 	height: 220px;
 	object-fit: contain;
 	filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
+}
+
+@media (max-width: 768px) {
+	.logo-image {
+		width: 150px;
+		height: 150px;
+	}
 }
 
 .company-title {
@@ -46,6 +164,20 @@ body {
 	animation: fadeInUp 1s ease-out 0.3s both;
 	position: relative;
 	display: inline-block;
+	z-index: 1;
+}
+
+@media (max-width: 768px) {
+	.company-title {
+		font-size: 2.5rem;
+		letter-spacing: 0.05em;
+	}
+}
+
+@media (max-width: 480px) {
+	.company-title {
+		font-size: 1.8rem;
+	}
 }
 
 .title-text {
@@ -103,6 +235,16 @@ body {
 		opacity: 0;
 	}
 	to {
+		opacity: 1;
+	}
+}
+
+@keyframes fadeInOutChar {
+	0%,
+	100% {
+		opacity: 0.2;
+	}
+	50% {
 		opacity: 1;
 	}
 }
