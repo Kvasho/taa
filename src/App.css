@@ -1,0 +1,108 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&display=swap");
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	background-color: #000;
+}
+
+#root {
+	width: 100%;
+	min-height: 100vh;
+	background-color: #000;
+}
+
+.landing-page {
+	width: 100%;
+	min-height: 100vh;
+	background-color: #000;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 2rem;
+}
+
+.logo-container {
+	animation: fadeInDown 1s ease-out both;
+}
+
+.logo-image {
+	width: 220px;
+	height: 220px;
+	object-fit: contain;
+	filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
+}
+
+.company-title {
+	font-family: "Playfair Display", serif;
+	font-size: 5rem;
+	font-weight: 900;
+	letter-spacing: 0.1em;
+	animation: fadeInUp 1s ease-out 0.3s both;
+	position: relative;
+	display: inline-block;
+}
+
+.title-text {
+	position: relative;
+	display: inline-block;
+	color: rgba(255, 255, 255, 0.3);
+}
+
+.title-text::after {
+	content: "TAA";
+	position: absolute;
+	left: 0;
+	top: 0;
+	color: #ffffff;
+	width: var(--fillWidth, 0%);
+	overflow: hidden;
+	white-space: nowrap;
+	transition: width 30ms ease-out;
+	filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.5));
+}
+
+@keyframes slideInDown {
+	from {
+		opacity: 0;
+		transform: translateY(-50px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes slideInUp {
+	from {
+		opacity: 0;
+		transform: translateY(30px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes fadeInDown {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
