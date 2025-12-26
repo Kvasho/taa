@@ -1,8 +1,40 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./App.css";
 
 function App() {
 	const [loadingProgress, setLoadingProgress] = useState(0);
+	const [logoDocked, setLogoDocked] = useState(false);
+	const [headerVisible, setHeaderVisible] = useState(false);
+	const [heroSlideIndex, setHeroSlideIndex] = useState(0);
+	const [language, setLanguage] = useState("ka");
+	const [scrollTick, setScrollTick] = useState(0);
+	const baseUrl = import.meta.env.BASE_URL || "/";
+
+	const I18N = {
+		ka: {
+			home: "მთავარი",
+			help: "დახმარება",
+			about: "ჩვენს შესახებ",
+			services: "სერვისები",
+			contact: "კონტაქტი",
+		},
+		en: {
+			home: "Home",
+			help: "Help",
+			about: "About",
+			services: "Services",
+			contact: "Contact",
+		},
+		ru: {
+			home: "Главная",
+			help: "Помощь",
+			about: "О нас",
+			services: "Сервисы",
+			contact: "Контакты",
+		},
+	};
+
+	const t = I18N[language] ?? I18N.ka;
 
 	useEffect(() => {
 		let rafId;
@@ -23,7 +55,67 @@ function App() {
 		};
 	}, []);
 
-	const revealWidth = (1536 * Math.min(loadingProgress, 100)) / 100;
+	useEffect(() => {
+		if (logoDocked) return;
+		if (loadingProgress < 100) return;
+
+		setLogoDocked(true);
+		requestAnimationFrame(() => setHeaderVisible(true));
+	}, [loadingProgress, logoDocked]);
+
+	useEffect(() => {
+		const prevOverflow = document.body.style.overflow;
+		if (loadingProgress < 100) {
+			document.body.style.overflow = "hidden";
+		} else {
+			document.body.style.overflow = prevOverflow;
+		}
+		return () => {
+			document.body.style.overflow = prevOverflow;
+		};
+	}, [loadingProgress]);
+
+	useEffect(() => {
+		let rafId = 0;
+		const onScrollOrResize = () => {
+			if (rafId) return;
+			rafId = requestAnimationFrame(() => {
+				rafId = 0;
+				setScrollTick((t) => t + 1);
+			});
+		};
+
+		window.addEventListener("scroll", onScrollOrResize, { passive: true });
+		window.addEventListener("resize", onScrollOrResize);
+		onScrollOrResize();
+
+		return () => {
+			window.removeEventListener("scroll", onScrollOrResize);
+			window.removeEventListener("resize", onScrollOrResize);
+			if (rafId) cancelAnimationFrame(rafId);
+		};
+	}, []);
+
+	const safeProgress = Number.isFinite(loadingProgress)
+		? Math.min(100, Math.max(0, loadingProgress))
+		: 0;
+	const revealWidth = (1536 * safeProgress) / 100;
+	const introDone = safeProgress >= 100;
+
+	const heroSlides = [
+		{ src: "pipeline.png", alt: "Pipeline" },
+		{ src: "manheim.png", alt: "Manheim" },
+		{ src: "copart.png", alt: "Copart" },
+	];
+
+	useEffect(() => {
+		if (!introDone) return;
+		if (heroSlides.length <= 1) return;
+		const intervalId = window.setInterval(() => {
+			setHeroSlideIndex((i) => (i + 1) % heroSlides.length);
+		}, 4500);
+		return () => window.clearInterval(intervalId);
+	}, [introDone, heroSlides.length]);
 
 	const LogoPaths = () => (
 		<>
@@ -37,9 +129,54 @@ function App() {
 		</>
 	);
 
+	const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+	const ParallaxSection = ({ id, src, alt, variant }) => {
+		const sectionRef = useRef(null);
+		// Use scrollTick to re-render on scroll.
+		void scrollTick;
+
+		const rect = sectionRef.current?.getBoundingClientRect();
+		const vh = typeof window !== "undefined" ? window.innerHeight || 1 : 1;
+		const vw = typeof window !== "undefined" ? window.innerWidth || 1 : 1;
+
+		const isVisible = rect ? rect.bottom > 0 && rect.top < vh : false;
+		// 0 -> just entering from bottom, 1 -> comfortably in view.
+		const enterProgress = rect ? clamp((vh - rect.top) / (vh * 0.6), 0, 1) : 0;
+		const progress = isVisible ? enterProgress : rect && rect.top < 0 ? 1 : 0;
+
+		const centerOffset = rect ? rect.top + rect.height / 2 - vh / 2 : 0;
+		const parallaxY = clamp(-centerOffset * 0.08, -90, 90);
+
+		// Avoid pushing images fully off-canvas on narrow screens.
+		const travelX = clamp(vw * 0.35, 120, 260);
+		let translateX = 0;
+		let scale = 1;
+		if (variant === "right") translateX = (1 - progress) * travelX;
+		if (variant === "left") translateX = -(1 - progress) * travelX;
+		if (variant === "grow") scale = 0.7 + 0.3 * progress;
+
+		const opacity = isVisible ? clamp(progress * 1.4, 0, 1) : 0;
+		const transform = `translate3d(${translateX}px, ${parallaxY}px, 0) scale(${scale})`;
+
+		return (
+			<section id={id} ref={sectionRef} className='scroll-section'>
+				<div className='scroll-inner'>
+					<img
+						src={`${baseUrl}${String(src).replace(/^\//, "")}`}
+						alt={alt}
+						className='scroll-image'
+						style={{ transform, opacity }}
+						loading='lazy'
+					/>
+				</div>
+			</section>
+		);
+	};
+
 	return (
-		<div className='landing-page'>
-			<div className='logo-container'>
+		<div className='page'>
+			<div className={`logo-container ${logoDocked ? "is-docked" : ""}`}>
 				<svg
 					version='1.0'
 					xmlns='http://www.w3.org/2000/svg'
@@ -74,6 +211,128 @@ function App() {
 					</g>
 				</svg>
 			</div>
+
+			{introDone ? (
+				<>
+					<header
+						className={`site-header ${headerVisible ? "is-visible" : ""}`}
+						lang={language}
+					>
+						<nav className='header-nav header-nav--left' aria-label='Primary'>
+							<a className='header-link' href='#home'>
+								{t.home}
+							</a>
+							<a className='header-link' href='#services'>
+								{t.services}
+							</a>
+							<a className='header-link' href='#help'>
+								{t.help}
+							</a>
+						</nav>
+
+						<div className='header-center-slot' aria-hidden='true' />
+
+						<div className='header-right'>
+							<nav
+								className='header-nav header-nav--right'
+								aria-label='Secondary'
+							>
+								<a className='header-link' href='#about'>
+									{t.about}
+								</a>
+								<a className='header-link' href='#contact'>
+									{t.contact}
+								</a>
+							</nav>
+
+							<div className='lang-buttons' role='group' aria-label='Language'>
+								<button
+									type='button'
+									className={`lang-button ${
+										language === "ka" ? "is-active" : ""
+									}`}
+									onClick={() => setLanguage("ka")}
+								>
+									KA
+								</button>
+								<button
+									type='button'
+									className={`lang-button ${
+										language === "en" ? "is-active" : ""
+									}`}
+									onClick={() => setLanguage("en")}
+								>
+									EN
+								</button>
+								<button
+									type='button'
+									className={`lang-button ${
+										language === "ru" ? "is-active" : ""
+									}`}
+									onClick={() => setLanguage("ru")}
+								>
+									RU
+								</button>
+							</div>
+						</div>
+					</header>
+
+					<section
+						id='home'
+						className={`hero-slider ${headerVisible ? "is-visible" : ""}`}
+						aria-label='Hero'
+					>
+						{heroSlides.map((slide, idx) => {
+							const isActive = idx === heroSlideIndex;
+							return (
+								<div
+									key={slide.src}
+									className={`hero-slide ${isActive ? "is-active" : ""}`}
+									role='img'
+									aria-label={slide.alt}
+									style={{
+										backgroundImage: `url(${baseUrl}${String(slide.src).replace(
+											/^\//,
+											"",
+										)})`,
+									}}
+								/>
+							);
+						})}
+					</section>
+
+					<ParallaxSection
+						id='services'
+						src='pipeline.png'
+						alt='Pipeline'
+						variant='right'
+					/>
+					<ParallaxSection
+						id='about'
+						src='manheim.png'
+						alt='Manheim'
+						variant='grow'
+					/>
+					<ParallaxSection src='copart.png' alt='Copart' variant='left' />
+					<ParallaxSection
+						src='acv-capital.png'
+						alt='ACV Capital'
+						variant='right'
+					/>
+					<ParallaxSection
+						id='contact'
+						src='contacts.png'
+						alt='Contacts'
+						variant='grow'
+					/>
+					<ParallaxSection
+						id='help'
+						src='phone.png'
+						alt='Phone'
+						variant='left'
+					/>
+				</>
+			) : null}
 		</div>
 	);
 }
