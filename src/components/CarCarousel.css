@@ -1,0 +1,253 @@
+.car-carousel {
+	width: min(1180px, 100%);
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	color: #0f0f0f;
+}
+
+.car-carousel__head {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+}
+
+.car-carousel__eyebrow {
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	font-size: 0.85rem;
+	font-weight: 700;
+	color: #2e2b28;
+}
+
+.car-carousel__title-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 1rem;
+}
+
+.car-carousel__title {
+	font-size: 2rem;
+	line-height: 1.1;
+}
+
+.car-carousel__controls {
+	display: flex;
+	gap: 0.5rem;
+}
+
+.car-carousel__controls button {
+	width: 44px;
+	height: 44px;
+	border-radius: 12px;
+	border: 1px solid rgba(0, 0, 0, 0.18);
+	background: rgba(255, 255, 255, 0.8);
+	color: #0f0f0f;
+	font-size: 1.25rem;
+	font-weight: 700;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+	transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.car-carousel__controls button:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.chevron {
+	display: block;
+	line-height: 1;
+}
+
+.car-card {
+	display: grid;
+	grid-template-columns: 1.1fr 0.9fr;
+	gap: 1.4rem;
+	background: #ffffff;
+	border: 1px solid rgba(0, 0, 0, 0.08);
+	border-radius: 22px;
+	padding: 1.2rem;
+	box-shadow: 0 24px 60px rgba(0, 0, 0, 0.14);
+	animation: cardIn 260ms ease;
+}
+
+.car-card__image-wrap {
+	position: relative;
+	overflow: hidden;
+	border-radius: 18px;
+	background: #f4f4f4;
+	min-height: 280px;
+}
+
+.car-card__image-wrap img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	transition: transform 220ms ease;
+}
+
+.car-card__image-wrap:hover img {
+	transform: scale(1.03);
+}
+
+.car-card__tag {
+	position: absolute;
+	top: 14px;
+	left: 14px;
+	background: #0f0f0f;
+	color: #fff;
+	padding: 0.45rem 0.7rem;
+	border-radius: 999px;
+	font-weight: 700;
+	font-size: 0.9rem;
+}
+
+.car-card__price {
+	position: absolute;
+	bottom: 14px;
+	right: 14px;
+	background: rgba(255, 255, 255, 0.92);
+	color: #0f0f0f;
+	padding: 0.6rem 0.85rem;
+	border-radius: 14px;
+	font-weight: 800;
+	letter-spacing: 0.02em;
+	box-shadow: 0 10px 26px rgba(0, 0, 0, 0.16);
+}
+
+.car-card__body {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	justify-content: center;
+}
+
+.car-card__name {
+	font-size: 1.4rem;
+	line-height: 1.2;
+}
+
+.car-card__specs {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 0.65rem;
+}
+
+.car-card__specs span {
+	background: #f5f5f0;
+	border: 1px solid rgba(0, 0, 0, 0.08);
+	border-radius: 12px;
+	padding: 0.55rem 0.75rem;
+	font-weight: 600;
+}
+
+.car-card__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.65rem;
+}
+
+.car-card__actions button {
+	border-radius: 12px;
+	border: 1px solid rgba(0, 0, 0, 0.12);
+	padding: 0.65rem 0.9rem;
+	font-weight: 700;
+	background: #0f0f0f;
+	color: #fff;
+	cursor: pointer;
+	transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+}
+
+.car-card__actions button.secondary {
+	background: #fff;
+	color: #0f0f0f;
+}
+
+.car-card__actions button:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+.car-carousel__rail {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	gap: 0.75rem;
+}
+
+.car-carousel__pill {
+	text-align: left;
+	padding: 0.85rem 1rem;
+	border-radius: 14px;
+	border: 1px solid rgba(0, 0, 0, 0.12);
+	background: rgba(255, 255, 255, 0.75);
+	cursor: pointer;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-weight: 600;
+	transition: border-color 120ms ease, background 120ms ease,
+		transform 120ms ease;
+}
+
+.car-carousel__pill:hover {
+	border-color: rgba(0, 0, 0, 0.3);
+	transform: translateY(-1px);
+}
+
+.car-carousel__pill.is-active {
+	background: #0f0f0f;
+	color: #fff;
+	border-color: #0f0f0f;
+}
+
+.car-carousel__pill-name {
+	flex: 1;
+	margin-right: 0.6rem;
+}
+
+.car-carousel__pill-price {
+	font-weight: 800;
+}
+
+@media (max-width: 1024px) {
+	.car-card {
+		grid-template-columns: 1fr;
+	}
+
+	.car-card__body {
+		align-items: flex-start;
+	}
+}
+
+@media (max-width: 640px) {
+	.car-carousel {
+		gap: 1.1rem;
+	}
+
+	.car-carousel__title {
+		font-size: 1.6rem;
+	}
+
+	.car-card__price {
+		font-size: 1rem;
+	}
+
+	.car-card__actions button {
+		width: 100%;
+		justify-content: center;
+	}
+}
+
+@keyframes cardIn {
+	from {
+		opacity: 0;
+		transform: translate3d(18px, 22px, 0);
+	}
+	to {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
+}

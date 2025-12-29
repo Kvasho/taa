@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root {
 	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;
@@ -17,6 +19,30 @@ html,
 body {
 	width: 100%;
 	height: 100%;
+	overflow-x: hidden;
+}
+
+/* Keep vertical scroll, but hide the scrollbar UI */
+html,
+body {
+	scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none; /* IE/Edge Legacy */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+	width: 0;
+	height: 0;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
 }
 
 a {
